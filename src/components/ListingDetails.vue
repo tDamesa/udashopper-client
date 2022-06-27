@@ -17,7 +17,7 @@ export default defineComponent({
   methods: {
     async update() {
       const token = await this.$auth0.getAccessTokenSilently();
-      await Api.updateListing(this.listing as any, token);
+      await Api.saveListing(this.listing as any, token);
       this.$emit('update');
     },
     async del() {

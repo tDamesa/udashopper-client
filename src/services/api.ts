@@ -1,6 +1,13 @@
 import { AddListingModel, ListingModel } from "../types";
 
 export class Api {
+  static async fileUpload(uploadUrl: any, images: ArrayBuffer): Promise<void> {
+    await fetch(uploadUrl, {
+      method: "PUT",  
+      body: images,
+    });
+  }
+
   static async getListings() {
     const result = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/listings`);
     return await result.json();
@@ -15,12 +22,12 @@ export class Api {
     return await result.json();
   }
 
-  static async updateListing(listing: ListingModel, token: string) {
+  static async saveListing(listing: ListingModel, token: string) {
     const result = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/listings`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
       body: JSON.stringify(listing),
     });
@@ -32,7 +39,7 @@ export class Api {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
     });
     return await result.json();
