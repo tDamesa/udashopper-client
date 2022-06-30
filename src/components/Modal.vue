@@ -2,8 +2,8 @@
   <div class="modal">
     <div class="modal__content">
       <div class="modal__title">
-        <div><slot name="title"></slot></div>
-        <div><a @click="$emit('close')">&#10006;</a></div>
+        <slot name="title"></slot>
+        <a @click="$emit('closed')">&#10006;</a>
       </div>
       <slot></slot>
     </div>

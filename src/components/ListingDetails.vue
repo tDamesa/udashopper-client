@@ -18,13 +18,13 @@ export default defineComponent({
     async update() {
       const token = await this.$auth0.getAccessTokenSilently();
       await Api.saveListing(this.listing as any, token);
-      this.$emit('update');
+      this.$emit('updated');
     },
     async del() {
       if (!confirm('Are you sure you want to delete this listing?')) return;
       const token = await this.$auth0.getAccessTokenSilently();
       await Api.deleteListing(this.listing.id, token);
-      this.$emit('delete');
+      this.$emit('deleted');
     }
   },
   mounted() {
@@ -46,11 +46,11 @@ export default defineComponent({
       <div class="details__images">
         <img
           class="details__selected-image"
-          :src="listing.images[selectedImageIndex]"
+          :src="listing.imageUrls[selectedImageIndex]"
         />
         <div class="details__image-selector">
           <img
-            v-for="(image, index) in listing.images"
+            v-for="(image, index) in listing.imageUrls"
             :key="index"
             :src="image"
             @click="selectedImageIndex = index"
@@ -62,7 +62,10 @@ export default defineComponent({
           <div v-if="mode == 'view'">{{ listing.description }}</div>
           <textarea v-else v-model="listing.description" rows="15"></textarea>
         </div>
-        <div class="details__price">${{ listing.price }}</div>
+        <div class="details__price">
+          <span v-if="mode == 'view'">${{ listing.price }}</span>
+          <input v-else type="number" v-model="listing.price" />
+        </div>
         <div class="details__actions" v-if="isMyListing">
           <button @click="mode = 'edit'" v-if="mode == 'view'">Edit</button>
           <button @click="update" v-else>Save</button>

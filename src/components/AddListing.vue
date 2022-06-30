@@ -7,12 +7,8 @@ import Modal from "./Modal.vue";
 export default defineComponent({
   data: () => {
     return {
-      listing: {
-        title: 'null',
-        description: 'null',
-        price: 0,
-        images: [],
-      } as AddListingModel,
+      listing: {} as AddListingModel,
+      images : [] 
     };
   },
   methods: {
@@ -20,17 +16,15 @@ export default defineComponent({
       try {
          const token = await this.$auth0.getAccessTokenSilently();
          const uploadInfo = await Api.saveListing(this.listing as any, token);
-         await Api.fileUpload(uploadInfo.uploadUrls, this.listing.images );
-
-         console.log(">>> Image uploaded >>>");
-
-         this.$emit('add');
+         await Api.fileUpload(uploadInfo.uploadUrls, this.images );
+         this.$emit('added', {...uploadInfo.item});
       } catch (e) {
         console.error("Upload failed", e);
       }
     },
     handleFileChange(event: any) {
-      this.listing.images = Array.from(event.target.files);
+      this.listing.numberOfImages = event.target.files.length;
+      this.images = event.target.files;
     },
   },
   components: { Modal },

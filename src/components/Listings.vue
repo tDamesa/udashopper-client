@@ -31,7 +31,11 @@ export default defineComponent({
     async removeListing() {
       this.listings.splice(this.selectedListingIndex!, 1);
       this.selectedListingIndex = null;
-    }
+    },
+    addListing(listing: ListingModel) {
+      this.listings.push(listing);
+      this.addingListing = false;
+    },
   },
   async mounted() {
     await this.getListings();
@@ -70,7 +74,7 @@ export default defineComponent({
       >
         <img
           class="listing__item-image"
-          :src="listing.images[0]"
+          :src="listing.imageUrls?.[0]"
           :alt="listing.title"
         />
         <div class="listing__item-info">
@@ -92,11 +96,11 @@ export default defineComponent({
     <ListingDetails
       v-if="selectedListingIndex != null"
       :listing="listings[selectedListingIndex]"
-      @close="selectedListingIndex = null"
-      @update="selectedListingIndex = null"
-      @delete="removeListing()"
+      @closed="selectedListingIndex = null"
+      @updated="selectedListingIndex = null"
+      @deleted="removeListing()"
     />
-    <AddListing v-if="addingListing" @close="addingListing = false" />
+    <AddListing v-if="addingListing" @closed="addingListing = false" @added="addListing"/>
   </div>
 </template>
 

@@ -1,11 +1,15 @@
 import { AddListingModel, ListingModel } from "../types";
 
 export class Api {
-  static async fileUpload(uploadUrl: any, images: ArrayBuffer): Promise<void> {
-    await fetch(uploadUrl, {
-      method: "PUT",  
-      body: images,
-    });
+  static async fileUpload(uploadUrls: string[], images: any): Promise<void> {
+    await Promise.all(
+      uploadUrls.map((uploadUrl, index) =>
+        fetch(uploadUrl, {
+          method: "PUT",
+          body: images[index],
+        })
+      )
+    );
   }
 
   static async getListings() {
